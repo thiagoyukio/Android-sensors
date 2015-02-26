@@ -13,7 +13,9 @@ This is an initial commit, a lot has to be done yet.
 
 ##Features
 -GPS
+
 -Orientation (either TYPE_ROTATION_VECTOR, TYPE_GEOMAGNETIC_ROTATION_VECTOR or TYPE_MAGNETIC_FIELD)
+
 -Torch (flash)
 More features can be added easily.
 
@@ -21,9 +23,13 @@ More features can be added easily.
 This initial commit has a lot of TODOs. We have a competition in less than a month
 and are rushing, so these changes will take some time to be done:
 1. Translate code to English
+
 2. Generate Doxygen documentation
+
 3. Move from the deprecated Camera API to Camera2
+
 4. Add instructions to communicate with this app
+
 5. Add licence information to source files
 
 ##Lost?
