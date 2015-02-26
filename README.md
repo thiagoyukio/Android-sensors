@@ -22,6 +22,7 @@ More features can be added easily.
 ##TODO
 This initial commit has a lot of TODOs. We have a competition in less than a month
 and are rushing, so these changes will take some time to be done:
+
 1. Translate code to English
 
 2. Generate Doxygen documentation
