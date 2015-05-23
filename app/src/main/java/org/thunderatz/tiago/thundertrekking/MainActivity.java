@@ -230,7 +230,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 
         pm = getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            torch = new TorchServer(logger, 1417);
+            torch = new TorchServer(logger, 1417, "TorchServer");
         } else
             log.append("Sem FEATURE_CAMERA_FLASH\n");
         if (pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).size() > 0) {
