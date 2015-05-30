@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">ThunderTrekking</string>
-    <string name="dummy_content">Thunder\nTrekking</string>
+    <string name="cascade">CascadeView</string>
+    <string name="main_background">Thunder\nTrekking</string>
 
 </resources>
