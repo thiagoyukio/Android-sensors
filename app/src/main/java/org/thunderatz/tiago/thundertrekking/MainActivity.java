@@ -46,7 +46,6 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
     private SensorThread gps;
     private SensorThread compass;
     private SensorThread proximity;
-    private TorchServer torch;
     private SensorEventListener sensor_listener;
     private LocationListener gps_listener = this;
     private LocationManager locationManager;
@@ -228,9 +227,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
             }
         });
 
-        pm = getPackageManager();
-        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            torch = new TorchServer(logger, 1417);
+
         } else
             log.append("Sem FEATURE_CAMERA_FLASH\n");
         if (pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).size() > 0) {
@@ -288,7 +285,6 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         gps.close();
         compass.close();
         proximity.close();
-        torch.close();
     }
 
     @Override
@@ -385,10 +381,12 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
     @Override
     public void onLocationChanged(Location location) {
         if (gps_ativado) {
-            ByteBuffer buffer = ByteBuffer.allocate(8 * 2); // espaço para 2 doubles
+            ByteBuffer buffer = ByteBuffer.allocate(8 * 2+ 4 * 2); // espaço para 2 doubles e 2 float
             buffer.order(ByteOrder.LITTLE_ENDIAN);
             buffer.putDouble(location.getLatitude());
             buffer.putDouble(location.getLongitude());
+            buffer.putFloat(location.getSpeed());
+            buffer.putFloat(location.getAccuracy());
             gps.send(buffer.array());
         }
     }
@@ -461,15 +459,5 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         log.append(s.getName() + ": acuracia " + Integer.toString(accuracy) + "\n");
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            torch.invert();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }

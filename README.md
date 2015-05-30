@@ -16,7 +16,7 @@ This is an initial commit, a lot has to be done yet.
 
 -Orientation (either TYPE_ROTATION_VECTOR, TYPE_GEOMAGNETIC_ROTATION_VECTOR or TYPE_MAGNETIC_FIELD)
 
--Torch (flash)
+
 More features can be added easily.
 
 ##TODO
