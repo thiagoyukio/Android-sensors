@@ -379,7 +379,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         }
     }
 
-    @Override
+ /*   @Override
     public void onLocationChanged(Location location) {
         if (gps_ativado) {
             ByteBuffer buffer = ByteBuffer.allocate(8 * 2+ 4 * 2); // espaço para 2 doubles e 2 float
@@ -391,8 +391,9 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
             gps.send(buffer.array());
         }
     }
-
+*/
     public void onNmeaReceived(long timestamp, String nmea){
+            gps.send(nmea);
         }
 
     @Override
