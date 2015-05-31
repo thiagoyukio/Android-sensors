@@ -44,13 +44,16 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
     private SensorManager mSensorManager;
     private float[] gravity = new float[] {0.f, 0.f, 0.f};
     private SensorThread gps;
+    private SensorThread gpsd;
     private SensorThread compass;
     private SensorThread proximity;
     private SensorEventListener sensor_listener;
     private LocationListener gps_listener = this;
+    private LocationListener gpsd_listener = this;
     private LocationManager locationManager;
     private int satelites_ultimo = -1, satelites_usados_ultimo = -1;
     private boolean gps_ativado = false;
+    private boolean gpsd_ativado = false;
     /*
     private static CameraDevice cameraDevice;
     private static CaptureRequest.Builder cameraBuilder;
@@ -97,10 +100,11 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 
         sensor_listener = this;
         gps_listener = this;
+        gpsd_listener = this;
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.addGpsStatusListener(this);
-        location.addNmeaListener(this);
+        locationManager.addNmeaListener(this);
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -228,9 +232,21 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
             }
         });
 
+        gpsd = new SensorThread(logger, 1417, "gpsd", new ListenerRegisterer() {
+            @Override
+            public boolean register() {
+                if (provider == null)
+                    return false;
+                return true;
+            }
 
-        } else
-            log.append("Sem FEATURE_CAMERA_FLASH\n");
+            @Override
+            public void unregister() {
+                gpsd_ativado = false;
+            }
+        });
+
+        pm = getPackageManager();
         if (pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).size() > 0) {
 
         } else
@@ -379,7 +395,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
         }
     }
 
- /*   @Override
+    @Override
     public void onLocationChanged(Location location) {
         if (gps_ativado) {
             ByteBuffer buffer = ByteBuffer.allocate(8 * 2+ 4 * 2); // espaço para 2 doubles e 2 float
@@ -391,10 +407,12 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
             gps.send(buffer.array());
         }
     }
-*/
+
     public void onNmeaReceived(long timestamp, String nmea){
-            gps.send(nmea);
-        }
+        if(gpsd_ativado)
+            gpsd.send(nmea.getBytes());
+
+    }
 
     @Override
     public void onProviderEnabled(String provider) {
