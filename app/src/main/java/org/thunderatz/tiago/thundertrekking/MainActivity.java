@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
-public class MainActivity extends Activity implements SensorEventListener, LocationListener, GpsStatus.Listener {
+public class MainActivity extends Activity implements SensorEventListener, LocationListener, GpsStatus.Listener, GpsStatus.NmeaListener {
 
     private static final float low_pass_alpha = 0.85f;
     private TextView log;
@@ -100,6 +100,7 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.addGpsStatusListener(this);
+        location.addNmeaListener(this);
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -390,6 +391,9 @@ public class MainActivity extends Activity implements SensorEventListener, Locat
             gps.send(buffer.array());
         }
     }
+
+    public void onNmeaReceived(long timestamp, String nmea){
+        }
 
     @Override
     public void onProviderEnabled(String provider) {
